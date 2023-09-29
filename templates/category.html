@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+        {% if category %}
+            {{ category.description|truncatewords:155 }}
+        {% else %}
+            Welcome
+        {% endif %}
+{% endblock %}
+
+{% block title %}
+{% if category %}
+            {{ category.name }} - tech
+        {% else %}
+            see new
+        {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if category %}
+
+
+    <div>
+        <div class="row my_row_class">
+            <div class="max-auto">
+            <p><a href="{% url 'shopapp:allprodcat' %}">Indoor Plants</a></p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+<div class="mx_auto">
+    {% if category %}
+    <img class="my_image" src="{{category.image.url}}" width="1250px" height="550px" alt="{{category.name}}">
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title">{{category.name}}</h1>
+    <p class="text-justify">{{category.description}}</p>
+</div>
+    {% else %}
+<div>
+<img class="my_image my_image_padding" src="{% static 'img/lotus group.jpg' %}" alt="our_products" width="1250px" height="455px">
+</div>
+<div>
+    <h1 class="text-center my_title">Our Plants</h1>
+    <p class="text-justify">Welcome to our online nursery, where you can find a wide variety of natural plants available for purchase. We specialize in providing a seamless plant online shopping experience, making it convenient for you to buy plants online and have them delivered right to your doorstep</p>
+</div>
+ {% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-4 col-md-4 xol-lg-4">
+            <div class="card text-center" style="min-width:15rem;">
+                <div>
+
+                    <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" width="200px" height="200px" alt="{{product.name}}"></a>
+                    <div class="card-body">
+                    <h5 class="card-title">{{product.name}}</h5>
+                    <p class="card-text">{{product.price}} Rs/-</p>
+                    </div>
+                    </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}"  class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+{% endblock %}
